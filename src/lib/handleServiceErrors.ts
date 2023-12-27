@@ -1,7 +1,7 @@
 import { AxiosError, CanceledError } from "axios";
 import { ERROR_MESSAGES } from "@/constants/errorMessages";
 import { isProblemDetails } from "@/types/guards/isProblemDetails";
-import { ServiceCallCanceled, ServiceCallError } from "@/types/ServiceCall";
+import { ServiceCallCanceled, ServiceCallError } from "@/types/serviceCall";
 
 export function handleServiceErrors(
   error: unknown

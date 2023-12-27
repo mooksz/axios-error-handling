@@ -1,5 +1,5 @@
 import { isObject } from "@/types/guards/isObject";
-import { ProblemDetails } from "../problemDetailts";
+import { ProblemDetails } from "../problemDetails";
 
 export function isProblemDetails(obj: unknown): obj is ProblemDetails {
   if (!isObject(obj)) return false;

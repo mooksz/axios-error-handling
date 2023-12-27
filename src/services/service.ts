@@ -1,6 +1,6 @@
 import HTTP from "@/lib/axios";
 import { handleServiceErrors } from "@/lib/handleServiceErrors";
-import { ServiceCallResult } from "@/types/ServiceCall";
+import { ServiceCallResult } from "@/types/serviceCall";
 
 type SuccessTestResponse = {
   message: string;
