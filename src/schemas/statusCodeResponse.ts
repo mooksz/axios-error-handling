@@ -3,7 +3,6 @@ import { z } from "zod";
 
 export const statusCodeResponse = z.object({
   message: z.string(),
-  test: z.string(),
 });
 
 export function isStatusCodeReponse(obj: unknown): obj is StatusCodeResponse {

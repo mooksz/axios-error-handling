@@ -1,12 +1,26 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { callService } from "@/services/service";
+import { useStoreDispatch } from "@/hooks/useStoreDispatch";
+import { useStoreSelector } from "@/hooks/useStoreSelector";
+import { testApi, testSelector } from "@/store/testSlice";
 
 export default function Code() {
-  const [message, setMessage] = useState("");
-  const [errors, setErrors] = useState<string[]>([]);
   const { isReady, query } = useRouter();
 
+  /** Local state */
+  const [localMessage, setLocalMessage] = useState("");
+  const [localErrors, setLocalErrors] = useState<string[]>([]);
+
+  /** Redux */
+  const {
+    message: storeMessage,
+    loading: storeLoading,
+    errors: storeErrors,
+  } = useStoreSelector(testSelector);
+  const dispatch = useStoreDispatch();
+
+  /** Local */
   useEffect(() => {
     if (!isReady) return;
 
@@ -16,8 +30,8 @@ export default function Code() {
 
     async function getData() {
       /** Reset data */
-      setErrors([]);
-      setMessage("");
+      setLocalErrors([]);
+      setLocalMessage("");
 
       const { code } = query;
 
@@ -32,11 +46,11 @@ export default function Code() {
       if (response.canceled) return;
 
       if (response.errors) {
-        setErrors(response.errors);
+        setLocalErrors(response.errors);
         return;
       }
 
-      setMessage(response.data.message);
+      setLocalMessage(response.data.message);
     }
 
     getData();
@@ -46,5 +60,35 @@ export default function Code() {
     };
   }, [isReady, query]);
 
-  return <main style={{ height: "100vh" }}>{message || errors[0]}</main>;
+  /** Redux */
+  useEffect(() => {
+    if (!isReady) return;
+
+    const { code } = query;
+
+    if (!code) return;
+
+    const controller = dispatch(
+      testApi(code instanceof Array ? code[0] : code)
+    );
+
+    return () => {
+      controller.abort();
+    };
+  }, [isReady, query]);
+
+  return (
+    <main style={{ height: "100vh" }}>
+      <div>
+        <h3>Local state</h3>
+        <p>{localMessage || localErrors[0]}</p>
+      </div>
+
+      <div>
+        <h3>Redux</h3>
+
+        <p>{storeLoading ? "Laden" : storeMessage || storeErrors[0]}</p>
+      </div>
+    </main>
+  );
 }
