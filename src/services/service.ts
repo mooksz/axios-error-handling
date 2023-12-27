@@ -20,10 +20,10 @@ export async function callService(
     /** Zod validation */
     statusCodeResponse.parse(data);
 
-    // /** Custom typeguard */
-    // if (!isStatusCodeReponse(data)) {
-    //   throw new Error("Data not of type statusCodeResponse");
-    // }
+    /** Custom typeguard */
+    if (!isStatusCodeReponse(data)) {
+      throw new Error("Data not of type statusCodeResponse");
+    }
 
     return {
       canceled: false,
