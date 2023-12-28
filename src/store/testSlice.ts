@@ -54,7 +54,10 @@ const test = createSlice({
         state.errors = [];
       })
       .addCase(testApi.rejected, (state, action) => {
-        if (action.meta.aborted) return;
+        if (action.meta.aborted) {
+          state.loading = false;
+          return;
+        }
 
         state.message = "";
         state.loading = false;
